@@ -1,0 +1,87 @@
+\chapter{Introdução}
+
+\section{Tema}
+Este trabalho explora a criação de novas abordagens para extração de características utilizadas em modelos de predição que contribuem para a identificação de discurso de ódio em dados textuais.
+
+\section{Delimitação do Problema}
+Com o advento das redes sociais online (RSO), cada vez mais pessoas expõem suas ideias e opiniões nestes ambientes. Os usuários exploram aspectos de RSO, como o anonimato e políticas frágeis de publicação de conteúdo, para disseminar mensagens de discurso de ódio, como por exemplo racismo, xenofobia, homofobia, etc \cite{almeida2017abordagem}. O discurso de ódio é comumente definido como qualquer comunicação que deprecie uma pessoa ou um grupo com base em alguma característica, como raça, cor, etnia, gênero, orientação sexual, nacionalidade, religião ou outra característica \cite{nockleby2000hate}.
+
+Devido à quantidade de dados que são gerados a cada dia, a auditoria manual de seu conteúdo para identificar discurso de ódio se torna uma tarefa impraticável. Filtros básicos de conteúdo, como expressões regulares ou \textit{blacklist}, que filtram o conteúdo de determinadas palavras, muitas vezes não fornecem uma solução adequada para a classificação \cite{schmidt2017survey}. Com isso a classificação de texto - a atividade de rotular textos de linguagem natural com categorias - está sendo aplicada em muitos contextos, desde a indexação de documentos baseada em um vocabulário controlado até a filtragem de documentos, com geração automatizada de metadados e desambiguação do sentido de palavra \cite{sebastiani2002machine}.
+ 
+Através da classificação de textos e o aprendizado de máquina é possível identificar discurso de ódio em documentos de forma automática. Para tal tarefa, métodos supervisionados de aprendizagem de máquina são aplicados para a criação de modelos que predizem se determinado documento se enquadra como discurso de ódio ou não. Segundo \cite{batista2003pre}, no aprendizado supervisionado é fornecido ao sistema de aprendizado um conjunto de exemplos $E = \{E_1, E_2,...,E_n\}$, sendo que cada exemplo $E_i \in E$ possui um rótulo associado. O rótulo determina a qual classe o exemplo pertence. Através de um nova entrada não rotulada, o classificador é capaz de predizer a classe à qual o dado se assemelha. Práticas de aprendizado de máquina são cada vez mais comuns e se tornam uma fonte de informação para empresas, governos e pesquisadores \cite{almeida2017abordagem}.
+ 
+Para o funcionamento dos algoritmos de aprendizagem de máquina e classificação de textos, é preciso que os dados possuam determinadas características. Essas características ou atributos nada mais são que informações que descrevem determinado documento. Normalmente esses atributos são exibidos de forma estruturada, como no exemplo da Tabela \ref{tab:exemplo-features}, um conjunto de dados que indicam se uma pessoa comprou ou não um carro, onde as colunas $portas, Qtd. Pessoas, Seguranca, Valor$ representam as informações dos dados e a coluna $Comprou$ representa qual classificação foi atribuída ao dado. 
+ 
+\begin{table}[h]
+    \centering
+    {\renewcommand\arraystretch{1.25}
+    \begin{tabular}{ l l l l l }
+    \cline{1-1}\cline{2-2}\cline{3-3}\cline{4-4}\cline{5-5}  
+    \multicolumn{1}{|p{1.3cm}|}{\textbf{Portas} \centering } &
+    \multicolumn{1}{p{3.2cm}|}{\textbf{Qtd. Pessoas} \centering } &
+    \multicolumn{1}{p{3.5cm}|}{\textbf{Segurança} \centering } &
+    \multicolumn{1}{p{2.4cm}|}{\textbf{Valor} \centering } &
+    \multicolumn{1}{p{3.5cm}|}{\textbf{Comprou?} \centering }
+  \\  
+    \cline{1-1}\cline{2-2}\cline{3-3}\cline{4-4}\cline{5-5}  
+    \multicolumn{1}{|p{1.3cm}|}{2 \centering } &
+    \multicolumn{1}{p{3.2cm}|}{4 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{baixa \centering } &
+    \multicolumn{1}{p{2.4cm}|}{10000 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{Sim \centering }
+  \\  
+    \cline{1-1}\cline{2-2}\cline{3-3}\cline{4-4}\cline{5-5}  
+    \multicolumn{1}{|p{1.3cm}|}{4 \centering } &
+    \multicolumn{1}{p{3.2cm}|}{4 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{média \centering } &
+    \multicolumn{1}{p{2.4cm}|}{15000 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{Sim \centering }
+  \\  
+    \cline{1-1}\cline{2-2}\cline{3-3}\cline{4-4}\cline{5-5}  
+    \multicolumn{1}{|p{1.3cm}|}{2 \centering } &
+    \multicolumn{1}{p{3.2cm}|}{2 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{alta \centering } &
+    \multicolumn{1}{p{2.4cm}|}{50000 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{Não \centering }
+  \\  
+    \cline{1-1}\cline{2-2}\cline{3-3}\cline{4-4}\cline{5-5}  
+    \multicolumn{1}{|p{1.3cm}|}{4 \centering } &
+    \multicolumn{1}{p{3.2cm}|}{5 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{baixa \centering } &
+    \multicolumn{1}{p{2.4cm}|}{25000 \centering } &
+    \multicolumn{1}{p{3.5cm}|}{Não \centering }
+  \\  
+    \hline
+    \end{tabular} 
+    }
+    \caption{Exemplo de um conjunto de dados e suas características.}\label{tab:exemplo-features}
+\end{table}
+ 
+Ao trabalhar com documentos, os dados são somente conteúdo de texto que apresentam dados não estruturados. No entanto, existem métodos para a extração de características dos textos que nos auxiliam na classificação desses dados. Alguns desses métodos serão vistos no Capítulo \ref{cap:fundamentacaoteorica}.
+ 
+Desse modo, a extração de características possibilita montar modelos de classificação que identificam se determinado documento possui discurso de ódio.
+
+\section{Objetivos}
+\subsection{Objetivo Geral}
+Analisar e propor extração características que ajudem os modelos  de predição a identificar textos ofensivos em documentos extraídos de redes sociais.
+
+\subsection{Objetivos Específicos}
+\begin{itemize}
+    \setlength\itemsep{1.2em}
+    \item Identificar as características que podem ser aplicadas no modelo de predição;
+    \item Aplicar as novas características no modelo de predição;
+    \item Examinar as métricas de desempenho da predição com as novas características.
+\end{itemize}
+
+\section{Justificativa}
+Com a popularização das redes sociais, há um grande volume de dados que se originam através dos conteúdos gerados pelos usuários, expondo suas opiniões e que dificilmente passam por algum tipo de auditoria para a identificação de textos ofensivos. Classificar grandes volumes de documentos de forma manual é uma tarefa que demanda um número expressivo de pessoas para a sua realização.
+
+A classificação de documentos utilizando aprendizado de máquina para resolver esse tipo de problema vem sendo estudado por muitas empresas que sofrem com essa adversidade, dentre as quais destacam-se o \textit{Facebook} e \textit{Twitter} \cite{nobata2016abusive}.
+
+Para realizar a classificação dos documentos, diversos métodos de processamento de linguagem natural e algoritmos de aprendizagem de máquina supervisionados podem ser empregados. 
+
+Reconhecer o contexto dos documentos para identificar quais características serão extraídas dos textos é importante, tendo em vista que, os usuários que publicam os discursos de ódio tendem a disfarçar palavras ofensivas, dificultando ainda mais a extração de informações. Do mesmo modo, destaca-se que tanto os dados quanto a linguagem mudam, sendo necessária a combinação entre métodos e características para auxiliar modelos a realizar predição dos dados, tarefa de grande importância no contexto de classificação de documentos \cite{nobata2016abusive}. 
+
+\section{Estrutura do Trabalho}
+
+Este trabalho está estruturado em 5 capítulos. O primeiro Capítulo foi apresentada a introdução, definindo o tema de pesquisa, os objetivos e a justificativa. No Capítulo 2 relato a fundamentação teórica. No capítulo 3 são abordados os trabalhos relacionados. Capítulo 4 apresenta a proposta para este trabalho. No capítulo 5 apresenta-se os experimentos realizados e os resultados obtidos. Por fim, o capítulo que traz a conclusão deste trabalho.

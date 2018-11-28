@@ -1,0 +1,42 @@
+\chapter{Metodologia}\label{cap:metodologia}
+Após a definição da área de pesquisa, o primeiro passo foi a realização de uma busca pelos trabalhos relacionados a mesma. Para isso, foi utilizada a plataforma \textit{Google Scholar}, tendo como entrada os seguintes termos para realizar a busca: {\it "hate speech", "hate speech machine learning", "sentiment social media", "text classification", "text classification feature extraction".} A partir dos resultados obtidos com a busca, os principais trabalhos relacionados ao tema foram selecionados de acordo com a sua relevância (semelhança do tema com o título, quantidade de citações e local de publicação).
+
+Por meio de uma primeira análise dos trabalhos encontrados, duas recentes abordagens foram selecionados, sendo eles: \cite{davidson2017automated} e \cite{nobata2016abusive}, ambas representam trabalhos relevantes na criação de um modelo de predição para identificar discurso de ódio em documentos extraídos da \textit{web}. Já o trabalho  \cite{canutoestudo}, propõe a criação de características, que será utilizada por este projeto. 
+
+A partir da leitura desses trabalhos, observou-se que ambos usam abordagens diferentes para a extração de características levando em conta o contexto em que cada trabalho utilizou para a classificação dos textos. Dessa forma, após a realização do estudo inicial, foi definido como tema deste trabalho, uma proposta para extração de atributos para identificação de textos ofensivos. 
+
+O trabalho está dividido em algumas etapas que determinam o desenvolvimento do mesmo, a fim de se realizar os objetivos que foram definidos. As etapas foram distribuídas da seguinte forma:
+
+\begin{itemize}
+    \item \textbf{Etapa 1:} Pesquisa bibliográfica;
+    \item \textbf{Etapa 2:} Definição de uma base de dados onde serão aplicados os métodos de extração de características para a realização do trabalho;
+    \item \textbf{Etapa 3:} Definição dos métodos que serão utilizado no trabalho para a extração das características;
+    \item \textbf{Etapa 4:} Relacionar métodos supervisionados de aprendizagem de máquina para classificar os textos da base de dados;
+    \item \textbf{Etapa 5:} Definir métricas para comparar os resultados obtidos com trabalhos relacionados;
+    \item \textbf{Etapa 6:} Definir uma forma de apresentar os resultados obtidos pelos experimentos. Avaliar e apresentar os resultados obtidos.
+\end{itemize}
+
+% etapa 1
+Na \textbf{etapa 1} é retomada a pesquisa bibliográfica do trabalho, que teve início no mês de março de 2018. Compreender os métodos usados para a extração de características é de grande importância, tendo em vista que outros métodos de PLN não citados neste trabalho podem ser incluídos na pesquisa. 
+
+% etapa 2
+Durante a \textbf{etapa 2}, foi definida um conjunto de dados já existente para a realização da monografia.
+O trabalho \cite{davidson2017automated} possui uma base já rotulada com dados do \textit{twitter}. A classificação é feita em três categorias, descrito na Seção \ref{sec:trabrel-1.1}. 
+
+Já o trabalho \cite{nobata2016abusive} utiliza uma base de dados pública proposta pelo artigo, onde possui vários comentários retirados da \textit{web}. A base é rotulada com duas categorias, o conteúdo do documento pode ser abusivo ou não-abusivo, também visto anteriormente na Seção \ref{sec:trabrel-1.2}. 
+
+Outra base de dados que pode ser utilizado é referente ao trabalho \cite{Pelle2017}, são comentários em língua portuguesa extraídos de um site de notícias, são aproximadamente 1000 documentos previamente classificados, com o intuito de identificar textos ofensivos. A classificação do mesmo diz se o documento é ofensivo ou não-ofensivo.
+
+% etapa 3
+A \textbf{etapa 3} é destinada para a definição de quais métodos serão utilizados na pesquisa. Alguns métodos foram apresentados no capítulo \ref{cap:fundamentacaoteorica}. Novos métodos podem ser propostos com a realização da etapa 1. A combinação de métodos como apresentado no trabalho \cite{nobata2016abusive} ou a exclusão de atributos não relevantes para o modelo é uma das opções a serem abordadas.
+
+No trabalho \cite{canutoestudo} é proposto a criação de meta-atributos para a classificação de texto, anteriormente explicado na Seção \ref{sec:trabrel-2}. Neste trabalho pretende-se aplicar tais meta-atributos como um meio  melhorar a qualidade da classificação dos documentos. De acordo com a pesquisa bibliográfica realizada, nenhum trabalho aborda esse tipo de característica.
+
+% etapa 4
+A escolha dos algoritmos de aprendizado de máquina supervisionado que serão utilizados para a predição dos dados se dará na \textbf{etapa 4}. Os trabalhos relacionado, vistos na Seção \ref{cap:trabrel}, por exemplo, utilizaram o algoritmo \textit{SVM} para avaliação dos modelos. Nessa etapa será criado outros modelos com algoritmos diferentes de classificação.
+
+% etapa 5
+Durante o processo de criação de um modelo de aprendizagem de máquina é preciso medir a qualidade dele de acordo com o objetivo à ser alcançado. Existem funções matemáticas que ajudam a avaliar a capacidade de erro e acerto dos modelos de classificação, elas são chamadas de métricas e serão implementadas na \textbf{etapa 5}, como a Precisão Geral (acurácia), precisão, revocação e \textit{F1 Score} \cite{tfidf-martins2003metodologia}.
+
+% etapa 6
+Por fim, a \textbf{etapa 6} consiste em definir a forma com que os resultados serão apresentados. Para isso, as opções de gráficos e tabelas exibindo o comportamento e os valores obtidos pela execução dos experimentos será utilizada.
