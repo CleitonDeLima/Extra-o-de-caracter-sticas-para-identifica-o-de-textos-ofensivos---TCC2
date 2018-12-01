@@ -107,7 +107,7 @@ Para a classificação dos textos foram criados algumas conjuntos para testes, u
 \begin{itemize}
     \item Redução do Texto: Nesse método, é criado conjuntos de dados com o texto original ({\it original}) e outros com o texto em caixa baixa ({\it lower}).
     \item Tokenização: O texto é dividido em {\it tokens}, onde cada {\it token} é formado por {\it n-grams} e cada {\it unigram} (${1G}$), {\it unigram} e {\it bigram} (${1G+2G}$) e {\it unigram}, {\it bigram} e {\it trigram} (${1G+2G+3G}$) são combinados. Cada {\it token} representa como uma nova característica no conjunto a ser classificado.
-    \item Ganho de informação: É selecionado somente características e tem correlação positiva com a classe a ser predita (${FS}$).
+    \item Ganho de informação: É selecionado somente características que tem correlação positiva com a classe a ser predita (${FS}$), assim tendo uma redução na quantidade de atributos.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -117,7 +117,7 @@ Para a classificação dos textos foram criados algumas conjuntos para testes, u
   \label{fig:pelle-statistic}
 \end{figure}
 
-Os algoritmos usado para realizar a classificação do texto foram SVM ({\it Support Vector Machine}) e NB ({\it Naive Bayes}). Como mostra na Figura \ref{fig:pelle-results}, SVM teve um melhor resultado em ambas as base de dados. A base de dados {\it OffComBR-3} teve um melhor resultado, pois a pré-classificação de texto ofensivo está mais definida, onde o texto ofensivo foi classificado pelas três pessoas, ao contrário da {\it OffComBR-2}.
+Os algoritmos usado para realizar a classificação do texto foram SVM ({\it Support Vector Machine}) e NB ({\it Naive Bayes}). Como mostra na Figura \ref{fig:pelle-results}, SVM obteve um melhor resultado em ambas as base de dados. A base de dados {\it OffComBR-3} teve um melhor resultado, pois a pré-classificação de texto ofensivo está mais definida, e o texto ofensivo foi classificado pelas três pessoas, ao contrário da {\it OffComBR-2}.
 
 \begin{figure}[ht]
   \centering

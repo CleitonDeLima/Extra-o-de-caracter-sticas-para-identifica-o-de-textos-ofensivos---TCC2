@@ -1,45 +1,48 @@
 \chapter{Proposta}\label{cap:proposta}
 
-Conforme descrito neste trabalho,métodos de aprendizado de máquina são usados  para identificar conteúdo indevido em textos. Para tais métodos, utilizar boas características (\textit{features}) ajudam a obter melhores resultados durante a classificação.
+Conforme apresentado neste trabalho, métodos de aprendizado de máquina são usados  para identificar conteúdo indevido em textos. Para tais métodos, utilizar boas características (\textit{features}) ajudam a obter melhores resultados durante a classificação.
 
-Identificar discurso de ódio em documentos com a utilização de aprendizado de máquina requer a aplicação de alguns métodos de PLN (apresentados no Capítulo \ref{cap:trabrel} dos Trabalhos Relacionados). O trabalho de \cite{davidson2017automated} e do \cite{nobata2016abusive} (Seção \ref{sec:trabrel-1.2} e  Seção \ref{sec:trabrel-1.1}, respectivamente), utilizam métodos de pré-processamento de textos para criação de suas características, no qual é usado combinações de muitos atributos que ajudam o modelo de predição a ter um melhor desempenho. Já no trabalho de \cite{canutoestudo} (descrito na Seção \ref{sec:trabrel-2}), é proposto a criação de meta-atributos a partir de dados previamente rotulados, onde o objetivo é capturar informações novas e relevantes sobre uma distribuição de dados desconhecida
+Identificar discurso de ódio em documentos com a utilização de aprendizado de máquina requer a aplicação de alguns métodos de PLN (apresentados no Capítulo \ref{cap:trabrel} dos Trabalhos Relacionados). O trabalho de \cite{davidson2017automated} e do \cite{nobata2016abusive} (Seção \ref{sec:trabrel-1.2} e  Seção \ref{sec:trabrel-1.1}, respectivamente), utilizam métodos de pré-processamento de textos para criação de suas características, no qual é usado combinações de  atributos que ajudam o modelo de predição a ter um melhor desempenho. Já no trabalho de \cite{canutoestudo} (descrito na Seção \ref{sec:trabrel-2}), é proposto a criação de meta-atributos a partir de dados previamente rotulados, onde o objetivo é capturar informações  relevantes sobre uma distribuição de dados desconhecida
 que relaciona os padrões observados às suas respectivas categorias. 
 
-A proposta deste trabalho é extrair novas características a partir de meta-atributos gerados através de informações retirados vizinhança de cada documento, inspirado no trabalho de \cite{canutoestudo}, os meta-atributos são encontrados através do algoritmo de classificação KNN, descrito na Seção \ref{sec:knn}. A base de dados a ser utilizada é a mesma abordada por \cite{Pelle2017} juntamente com os seus conjuntos para teste, apresentado na Seção \ref{sec:proposta-base-dados}.
+A proposta deste trabalho é extrair novas características a partir de meta-atributos gerados através de informações retiradas da vizinhança de cada documento. Inspirado no trabalho de \cite{canutoestudo}, os meta-atributos são encontrados através do algoritmo de classificação KNN, descrito na Seção \ref{sec:knn}. A base de dados a ser utilizada é a mesma abordada por \cite{Pelle2017} juntamente com os seus conjuntos para teste, apresentado na Seção \ref{sec:proposta-base-dados}.
 
 \section{Método Proposto}
-Esta seção tem por objetivo descrever como funciona o método proposto aplicado neste trabalho. 
+Esta seção tem por objetivo descrever como funciona o método proposto neste trabalho. 
 
-Para aplicação do método, inicialmente é usado o algoritmo de classificação KNN para encontrar a vizinhança mais próxima dos documentos previamente rotulados. A distancia usada para determinar a proximidade dos vizinhos ao documento, é definida pela similaridade do cosseno. 
+Para aplicação do método, inicialmente é usado o algoritmo de classificação KNN para encontrar a vizinhança mais próxima dos documentos previamente rotulados. A distância usada para determinar a proximidade dos vizinhos ao documento, é definida pela similaridade do cosseno. 
 
 Com as informações da vizinhança para cada documento, é feita a criação de novas características a partir das mesmas. A proposta das novas características é capturar informação do conjunto já rotulado de três diferentes formas:
 
 \begin{enumerate}
     \item Contagem de exemplos rotulados, da mesma maneira que fez o método kNN;
-    \item Capturar a relação entre a classe escolhida pelo kNN (a classe com maior número de vizinhos) com a outra classes;
+    \item Capturar a relação entre a classe escolhida pelo kNN (a classe com maior número de vizinhos) com as outras classes;
     \item Análise da distribuição das distâncias para cada classe.
 \end{enumerate}
 
-% \begin{itemize}
-%     \item {\bf Menor distância}: Dentre todos os vizinhos, foi escolhido o mais próximo, e com a menor distância é definida a característica.  
-%     \item {\bf Maior distância}: De todos os vizinhos é escolhido o mais distante e atribuindo a maior distancia como uma característica.
-%     \item {\bf Média distância}: Característica criada a partir da média de todas as distâncias dos vizinhos.
-%     \item {\bf Contagem de vizinhos}: É feito uma contagem dos vizinhos de determinada classe.
-%     \item {\bf Razão entre as classes}: Para tal, basta dividir o número de vizinhos em cada classe pelo número de vizinhos da classe com maior número de vizinhos, com objetivo de capturar a relação entre a classe escolhida pelo kNN e as outras classes.
-%     \item {\bf Quartil inferior}: valor que delimita os 25\% das menores distâncias.
-%     \item {\bf Quartil superior}: valor que delimita os 25\% das maiores distâncias.
-% \end{itemize}
+Na primeira é criada duas características, que são a contagem do número de exemplos rotulados de cada categoria entre os vizinhos. Por exemplo, se 10 dos vizinhos estão classificados como discurso de ódio e os outros 20 como sendo de outra categoria, as duas novas características seriam com os valores $10$ e $20$.
+
+Para a segunda abordagem na criação dos meta-atributos, consiste na normalização do conjunto de meta-atributos anterior. Para tal, é feito a divisão do número de vizinhos em cada classe pelo quantidade de vizinhos da classe com maior número de vizinhos. Seguindo o exemplo anterior, se 10 dos vizinhos estão classificados como discurso de ódio e os outros 20 como sendo de outra categoria, as novas características seriam os valores $10/20$ (0.5) e $20/20$ (1).
+
+Por último,  a informação fornecida com os meta-atributos propostos é baseada em uma análise das distâncias para cada classe observada na vizinhança. Para tal, foram escolhidos diferentes pontos que podem caracterizar a informação contida na distribuição das distâncias, totalizando cinco novas características por classe, sendo elas:
+\begin{itemize}
+    \item {\bf Menor distância}: Dentre todos os vizinhos, foi escolhido o vizinho mais próximo ao documento;
+    \item {\bf Maior distância}: De todos os vizinhos, foi escolhido o vizinho mais distante  ao elemento;
+    \item {\bf Distância média }: De todos os vizinhos, é definida a distância média entre os mesmos.
+    \item {\bf Quartil inferior}: Valor que delimita os 25\% das menores distâncias.
+    \item {\bf Quartil superior}: Valor que delimita os 25\% das maiores distâncias.
+\end{itemize}
 
 \chapter{Experimentos e Resultados}
 
-Neste capítulo, serão apresentados os resultados obtidos para cada experimento. Serão detalhados os algoritmos que foram utilizados para a classificação dos dados, conforme descritos na proposta deste trabalho, Seção \ref{cap:proposta}. A Seção \ref{sec:proposta-base-dados} tem como objetivo mostrar a base de dados que foi utilizada para realização dos teste e também a descrição de cada experimento proposto. Já na Seção \ref{sec:proposta-metricas} e \ref{sec:proposta-experimentos} são apresentadas as métricas utilizadas para cada experimento e os seus resultados.  
+Neste capítulo, serão apresentados os resultados obtidos na experimentação. Serão detalhados os algoritmos que foram utilizados para a classificação dos dados, conforme descritos na proposta deste trabalho, Seção \ref{cap:proposta}. A Seção \ref{sec:proposta-base-dados} tem como objetivo mostrar a base de dados que foi utilizada para realização dos teste e também a descrição de cada experimento proposto. Já na Seção \ref{sec:proposta-metricas} e \ref{sec:proposta-experimentos} são apresentadas as métricas utilizadas para cada experimento e os seus resultados.  
 
-Vale ressaltar, os experimentos e resultados foram construídos e avaliados com ferramentas diferentes ao trabalho de \cite{Pelle2017}. Para o trabalho relacionado, os resultados foram obtidos pela ferramenta {\it Weka}, neste trabalho, foi utilizado outros recursos descritos na Seção \ref{sec:codigo-fonte}, e parâmetros obrigatórios de algoritmos foram os mesmos utilizados no {\it Weka}. É notável uma diferença na quantidade de características e em alguns resultados obtidos, porém, ambas não comprometem o resultado obtido. 
+Vale ressaltar que, os experimentos e resultados foram construídos e avaliados com ferramentas diferentes ao trabalho de \cite{Pelle2017}. Para o trabalho relacionado, os resultados foram obtidos pela ferramenta {\it Weka}, neste trabalho, são usados outros recursos descritos na Seção \ref{sec:codigo-fonte}. Parâmetros obrigatórios de algoritmos foram os mesmos utilizados no {\it Weka}. É notável uma diferença na quantidade de características e em alguns resultados obtidos, porém, ambas não comprometem o resultado final. 
 
 \section{Base de Dados}\label{sec:proposta-base-dados}
-A base de dados apresentada no trabalho relacionado \cite{Pelle2017}, Seção \ref{sec:trabrel-br}, e que pode ser obtida por {\it download} \footnote{\url{https://github.com/rogersdepelle/OffComBR}} foi utilizada para a realização dos experimentos.
+A base de dados utilizada para a realização dos experimentos foi utilizada do trabalho  \cite{Pelle2017} (Seção \ref{sec:trabrel-br}) e que pode ser obtida por {\it download} \footnote{\url{https://github.com/rogersdepelle/OffComBR}}.
 
-Como visto anteriormente na Seção \ref{sec:trabrel-br}, a base de dados é composta por duas partes denominadas {\it OffComBR-2} e {\it OffComBR-3}. As duas contêm os textos (comentários da web) juntamente com o rótulo de classificação, na qual indica se o texto representa discurso de ódio (classificação positiva) ou não. Na primeira parte, composta por 1.250 comentários, 419 destes são considerados discurso de ódio, representando aproximadamente de 33,5\% e cada rótulo foi classificado por pelo menos duas pessoas. Já na segunda, são 1.033 comentários, 202 dos mesmos são considerados discurso de ódio, que representa aproximadamente 19,55\% dos dados e a classificação foi atribuída por três pessoas. Ambos os dados podem ser visto na Tabela \ref{tab:proposta-base-dados}.
+Como visto anteriormente, a base de dados é composta por duas partes denominadas {\it OffComBR-2} e {\it OffComBR-3}. As duas contêm os textos (comentários da web) juntamente com o rótulo de classificação, na qual indica se o texto representa discurso de ódio (classificação positiva) ou não. Na primeira parte, composta por 1.250 comentários, 419 destes são considerados discurso de ódio, representando aproximadamente de 33,5\% e cada rótulo foi classificado por pelo menos duas pessoas. Já na segunda, são 1.033 comentários, 202 dos mesmos são considerados discurso de ódio, que representa aproximadamente 19,55\% dos dados e a classificação foi atribuída por três pessoas. Ambos os dados podem ser visto na Tabela \ref{tab:proposta-base-dados}.
 
 \begin{table}[h]
     \centering
@@ -58,7 +61,7 @@ Como visto anteriormente na Seção \ref{sec:trabrel-br}, a base de dados é com
     \caption{Estatística das Bases de Dados.}\label{tab:proposta-base-dados}
 \end{table}
 
-Para a aplicação do método, foram criados alguns conjuntos de experimentos, os mesmos propostos em \cite{Pelle2017}. Para cada experimento foi criado determinadas características utilizando alguns métodos de PLN. Como é apresentado na Tabela \ref{tab:proposta-base-dados-experimentos}, experimentos com o prefixo {\it original} foram mantidos o texto com a forma original do comentário. Já experimentos com prefixo {\it lower}, o texto foi transformado em caixa baixa, diminuindo assim a dimensionalidade das características. Alguns experimentos possuem combinações de {\it N-gram}, conforme indicado na Tabela \ref{tab:proposta-base-dados-experimentos}, experimentos que usam {\it 1-gram}, {\it 2-gram} ou {\it 3-gram} estão marcados como {\it Sim}. A coluna {\it FS} indica se o experimento possui somente as melhores características utilizando o ganho de informação. {\it TC2} e {\it TC3} mostram o total de características para cada experimento nas base de dados {\it OffComBR-2} e {\it OffComBR-3} respectivamente.     
+Para a aplicação do método, foram criados alguns conjuntos de experimentos, os mesmos propostos em \cite{Pelle2017}. Para cada experimento foi criada determinadas características utilizando alguns métodos de PLN. Como é apresentado na Tabela \ref{tab:proposta-base-dados-experimentos}, experimentos com o prefixo {\it original} foram mantidos o texto com a forma original do comentário. Já experimentos com prefixo {\it lower}, o texto foi transformado em caixa baixa, diminuindo assim a dimensionalidade das características. Alguns experimentos possuem combinações de {\it N-gram}, conforme indicado na Tabela \ref{tab:proposta-base-dados-experimentos}, experimentos que usam {\it 1-gram}, {\it 2-gram} ou {\it 3-gram} estão marcados como {\it Sim}. A coluna {\it FS} indica se o experimento possui somente as melhores características utilizando o ganho de informação. {\it TC2} e {\it TC3} mostram o total de características para cada experimento nas base de dados {\it OffComBR-2} e {\it OffComBR-3} respectivamente.     
 
 \begin{table}[h]
     \centering
@@ -88,90 +91,130 @@ Para a aplicação do método, foram criados alguns conjuntos de experimentos, o
     \caption{Experimentos e suas Característica referente ao trabalho \cite{Pelle2017}}\label{tab:proposta-base-dados-experimentos}
 \end{table}
 
-\section{Métricas}\label{sec:proposta-metricas}
-Para avaliar a eficácia do método proposto foi utilizado a mesma abordagem do trabalho \cite{Pelle2017}. O métrica avaliada para os experimentos foi {\it f-score}, no qual representa a média harmônica entre precisão e revocação, levando sempre em consideração o peso das classes ({\it f1-weighted}). Para obter uma média mais cofiável dos experimentos, foi usado validação cruzada de dez vezes em cada conjunto de testes e feita a média do {\it f-score} de todas as execuções. 
+\section{Métricas e Configurações}\label{sec:proposta-metricas}
+Para avaliar a eficácia do método proposto foi utilizada a mesma abordagem do trabalho \cite{Pelle2017}. A métrica avaliada para os experimentos foi {\it f-score}, no qual representa a média harmônica entre precisão e revocação, levando sempre em consideração o peso das classes ({\it f1-weighted}). Para obter uma média mais cofiável dos experimentos, foi usado validação cruzada de dez vezes em cada conjunto de testes e feita a média do {\it f-score} de todas as execuções. 
+
+Os experimentos, foram executados com dois algoritmos de classificação, o SVM, com os hiper parâmetros sendo: $kernel=linear$ e $C=1.0$. NB foi utilizado com os parâmetros originais do classificador. Cada teste foi executado com validação cruzada de dez vezes.
 
 Para validar as comparações entre os métodos, foi utilizado o teste {\it Student’s T-Test} (t-test) na métrica {\it f-score}. Esse teste é feito sobre dois conjuntos de dados e o seu resultado é um número, entre 0 e 1, que mede a confiança de uma afirmação. Neste trabalho, as afirmações que passam por validação são os resultados do trabalho \cite{Pelle2017} e da proposta deste trabalho. Caso o resultado do {\it t-test} for $\alpha > 0,05$, pode-se afirmar que uma proposta foi melhor ou pior que a outra em um determinado aspecto.
 
 \section{Execução dos Experimentos}\label{sec:proposta-experimentos}
 
 Foram conduzidos experimentos para avaliar a eficácia e o poder discriminativo dos meta-atributos
-descritos anteriormente, bem como dos atributos textuais originais. Esses atributos originais serão referenciados nas tabelas como {\it Pelle, 2017}. O grupo dos meta-atributos, método proposto neste trabalho, serão denominados como {\it LIMA}.
+descritos anteriormente, bem como dos atributos textuais originais. Esses atributos originais serão referenciados nas tabelas e no texto como {\it Pelle, 2017} ({\it baseline}). O grupo dos meta-atributos, método proposto neste trabalho, serão denominados como {\it LIMA}.
 
-Para os experimentos, foram executados dois algoritmos de classificação, o SVM, com os hiper parâmetros sendo: $kernel=linear$ e $C=1.0$. NB foi utilizado com os parâmetros originais do classificador. Cada teste foi executado com validação cruzada de dez vezes. 
+A seguir serão apresentados os resultados das execuções em ambas as base de dados, Tabelas \ref{tab:resultados-experimentos-br2} e \ref{tab:resultados-experimentos-br3}. As tabelas mostram os resultados das execuções dos algoritmos de classificação SVM e NB e juntamente com o desvio padrão, a indicação de ganho estatístico de cada média representado $\uparrow$, indicação de perda estatística das médias representada por $\downarrow$ e o empate estatístico representado por $\bullet$.
 
-A seguir serão apresentados os resultados das execuções em ambas as base de dados, Tabelas \ref{tab:resultados-experimentos-br2} e \ref{tab:resultados-experimentos-br3}. As tabelas mostram os resultados das execuções dos algoritmos de classificação SVM e NB e juntamente com o desvio padrão e a indicação de ganho estatístico de cada média. 
+\subsection{Experimentos com {\it OffComBr-2}}
 
-Na base de dados {\it OffComBr-2}, após aplicar o método e suas execuções, apresentados na Tabela \ref{tab:resultados-experimentos-br2}, pode-se perceber  em poucos casos que, a média das execuções entre {\it Pelle, 2017} e a combinação de {\it Pelle, 2017 + LIMA} obteve um resultado maior com o classificador SVM, como a dos experimentos {\it original\_1G\_FS}, {\it original\_1G\_2G\_FS}, {\it lower\_1G\_FS}, {\it lower\_1G\_2G\_FS} e {\it lower\_1G\_2G\_3G\_FS}. Na execução dos experimentos {\it LIMA} com o classificador SVM, todos os resultados foram abaixo ao de {\it Pelle, 2017}. Já o algoritmo de NB chegou em resultados mais próximos ao de {\it Pelle, 2017}.
+Na base de dados {\it OffComBr-2}, após aplicar o método e suas execuções, apresentados na Tabela \ref{tab:resultados-experimentos-br2}, pode-se perceber que em dois casos a média das execuções entre {\it baseline} e a combinação de {\it baseline + LIMA}, obteve-se um resultado melhor com o classificador SVM, no caso de {\it lower\_1G\_FS} teve um ganho de aproximadamente 5,14\% e {\it lower\_1G\_2G\_3G\_FS} de 7,7\%.
+
+Na execução dos experimentos {\it LIMA} relação ao \textit{baseline}, o classificador SVM obteve resultados inferiores, no qual, somente quatro experimentos tiveram empate estatístico. Já o algoritmo de NB obteve empate estatístico em dez casos e ganho estatístico em dois, {\it lower\_1G\_FS} e {\it lower\_1G\_2G\_3G\_FS}.
 
 \begin{table}[h]
 \renewcommand \arraystretch{1.25}
 \scalebox{0.675}{
 \begin{tabular}{l|cccc|cccc|cccc}
 \hline
-& \multicolumn{4}{c|}{\it \textbf{Pelle, 2017}} & \multicolumn{4}{c|}{\it \textbf{LIMA}} & \multicolumn{4}{c}{\it \textbf{Pelle, 2017 + LIMA}} \\ \hline
+& \multicolumn{4}{c|}{\it \textbf{baseline}} & \multicolumn{4}{c|}{\it \textbf{LIMA}} & \multicolumn{4}{c}{\it \textbf{baseline + LIMA}} \\ \hline
 \multicolumn{1}{c|}{\textbf{Experimento}} & \multicolumn{1}{c}{\textbf{SVM}} & \multicolumn{1}{c}{\textbf{STD}} & \multicolumn{1}{c}{\textbf{NB}} & \multicolumn{1}{c|}{\textbf{STD}} & \multicolumn{1}{c}{\textbf{SVM}} & \multicolumn{1}{c}{\textbf{STD}} & \multicolumn{1}{c}{\textbf{NB}} & \multicolumn{1}{c|}{\textbf{STD}} & \multicolumn{1}{c}{\textbf{SVM}} & \multicolumn{1}{c}{\textbf{STD}} & \multicolumn{1}{c}{\textbf{NB}} & \multicolumn{1}{c}{\textbf{STD}} \\ \hline
-\textit{original\_1G} & 67,12\% & 0,05 & 64,20\% & 0,05 & 61,59\% & 0,04 & 67,00\% & 0,04 & 67,77\% & 0,06 & 64,20\% & 0,05 \\ 
-\textit{original\_1G\_FS} & 70,81\% & 0,06 & 65,63\% & 0,03 & 64,14\% & 0,05 & 66,77\% & 0,05 & 72,46\% & 0,05 & 66,14\% & 0,04 \\ 
-\textit{original\_1G\_2G} & 66,47\% & 0,05 & 65,81\% & 0,04 & 62,09\% & 0,05 & 68,18\% & 0,04 & 66,81\% & 0,07 & 65,81\% & 0,04 \\
-\textit{original\_1G\_2G\_FS} & 70,05\% & 0,06 & 64,15\% & 0,03 & 63,08\% & 0,03 & 64,37\% & 0,05 & 71,23\% $\uparrow$ & 0,05 & 65,83\% & 0,03 \\
-\textit{original\_1G\_2G\_3G} & 67,67\% & 0,06 & 65,98\% & 0,04 & 61,71\% & 0,05 & 68,32\% & 0,04 & 66,91\% & 0,05 & 65,98\% & 0,04 \\
-\textit{original\_1G\_2G\_3G\_FS} & 70,79\% & 0,06 & 66,90\% & 0,04 & 62,07\% & 0,04 & 64,73\% & 0,06 & 70,82\% & 0,05 & 66,54\% & 0,04 \\
-\textit{lower\_1G} & 71,50\% & 0,06 & 65,47\% & 0,05 & 66,20\% & 0,06 & 67,19\% & 0,06 & 71,43\% & 0,05 & 65,47\% & 0,05 \\
-\textit{lower\_1G\_FS} & 68,66\% & 0,06 & 45,80\% & 0,08 & 64,57\% & 0,05 & 67,57\% & 0,05 & 72,19\% $\uparrow$ & 0,05 & 47,02\% & 0,10 \\
-\textit{lower\_1G\_2G} & 70,49\% & 0,06 & 67,19\% & 0,05 & 67,24\% & 0,05 & 68,53\% & 0,06 & 70,67\% & 0,05 & 67,19\% & 0,05 \\
-\textit{lower\_1G\_2G\_FS} & 69,58\% & 0,06 & 63,30\% & 0,05 & 65,29\% & 0,04 & 65,55\% & 0,05 & 72,46\% & 0,04 & 46,50\% & 0,09 \\
-\textit{lower\_1G\_2G\_3G} & 69,15\% & 0,06 & 67,57\% & 0,05 & 67,07\% & 0,05 & 69,23\% & 0,06 & 70,99\% & 0,05 & 67,57\% & 0,05 \\
-\textit{lower\_1G\_2G\_3G\_FS} & 66,95\% & 0,05 & 41,18\% & 0,11 & 67,94\% & 0,04 & 67,22\% & 0,04 & 72,11\% $\uparrow$ & 0,05 & 43,20\% & 0,10 \\ \hline
+\textit{original\_1G} & 67,12\% & 0,05 & 64,20\% & 0,05 & 61,59\% $\downarrow$ & 0,04 & 67,00\% $\bullet$ & 0,04 & 67,77\% $\bullet$ & 0,06 & 64,20\% $\downarrow$ & 0,05 \\ 
+\textit{original\_1G\_FS} & 70,81\% & 0,06 & 65,63\% & 0,03 & 64,14\% $\downarrow$ & 0,05 & 66,77\% $\bullet$ & 0,05 & 72,46\% $\bullet$ & 0,05 & 66,14\% $\bullet$ & 0,04 \\ 
+\textit{original\_1G\_2G} & 66,47\% & 0,05 & 65,81\% & 0,04 & 62,09\% $\bullet$ & 0,05 & 68,18\% $\bullet$ & 0,04 & 66,81\% $\bullet$ & 0,07 & 65,81\% $\downarrow$ & 0,04 \\
+\textit{original\_1G\_2G\_FS} & 70,05\% & 0,06 & 64,15\% & 0,03 & 63,08\% $\downarrow$ & 0,03 & 64,37\% $\bullet$ & 0,05 & 71,23\% $\bullet$ & 0,05 & 65,83\% $\bullet$ & 0,03 \\
+\textit{original\_1G\_2G\_3G} & 67,67\% & 0,06 & 65,98\% & 0,04 & 61,71\% $\downarrow$ & 0,05 & 68,32\% $\bullet$ & 0,04 & 66,91\% $\bullet$ & 0,05 & 65,98\% $\downarrow$ & 0,04 \\
+\textit{original\_1G\_2G\_3G\_FS} & 70,79\% & 0,06 & 66,90\% & 0,04 & 62,07\% $\downarrow$ & 0,04 & 64,73\% $\bullet$ & 0,06 & 70,82\% $\bullet$ & 0,05 & 66,54\% $\bullet$ & 0,04 \\
+\textit{lower\_1G} & 71,50\% & 0,06 & 65,47\% & 0,05 & 66,20\% $\downarrow$ & 0,06 & 67,19\% $\bullet$ & 0,06 & 71,43\% $\bullet$ & 0,05 & 65,47\% $\downarrow$ & 0,05 \\
+\textit{lower\_1G\_FS} & 68,66\% & 0,06 & 45,80\% & 0,08 & 64,57\% $\downarrow$ & 0,05 & 67,57\% $\uparrow$ & 0,05 & 72,19\% $\uparrow$ & 0,05 & 47,02\% $\bullet$ & 0,10 \\
+\textit{lower\_1G\_2G} & 70,49\% & 0,06 & 67,19\% & 0,05 & 67,24\% $\bullet$ & 0,05 & 68,53\% $\bullet$ & 0,06 & 70,67\% $\bullet$ & 0,05 & 67,19\% $\downarrow$ & 0,05 \\
+\textit{lower\_1G\_2G\_FS} & 69,58\% & 0,06 & 63,30\% & 0,05 & 65,29\% $\downarrow$ & 0,04 & 65,55\% $\bullet$ & 0,05 & 72,46\% $\bullet$ & 0,04 & 46,50\% $\downarrow$ & 0,09 \\
+\textit{lower\_1G\_2G\_3G} & 69,15\% & 0,06 & 67,57\% & 0,05 & 67,07\% $\bullet$ & 0,05 & 69,23\% $\bullet$ & 0,06 & 70,99\% $\bullet$ & 0,05 & 67,57\% $\downarrow$ & 0,05 \\
+\textit{lower\_1G\_2G\_3G\_FS} & 66,95\% & 0,05 & 41,18\% & 0,11 & 67,94\% $\bullet$ & 0,04 & 67,22\% $\uparrow$ & 0,04 & 72,11\% $\uparrow$ & 0,05 & 43,20\% $\bullet$ & 0,10 \\ \hline
 \end{tabular}
 }
 \caption{Experimentos com a base de dados {\it OffComBR-2}.}\label{tab:resultados-experimentos-br2}
 \end{table}
 
-Na Tabela \ref{tab:resultados-experimentos-br3}, são apresentados os resultados das execuções com a base de dados {\it OffComBR-3}. Destaca-se que todos os ganhos são maiores pelo fato de que a classificação dos comentários são mais precisos que a da base de dados {\it OffComBR-2}. Ao comparada com os resultados da Tabela \ref{tab:resultados-experimentos-br2}, esses experimentos tiveram ganhos semelhantes. Os experimentos {\it original\_1G\_2G\_3G\_FS}, {\it lower\_1G\_FS}, {\it lower\_1G\_2G\_FS} e {\it lower\_1G\_2G\_3G\_FS}, tiveram uma média maior com a combinação de {\it Pelle, 2017 + LIMA} utilizando o classificador SVM. Com NB, somente o experimento {\it lower\_1G\_FS} obteve melhor resultado. Resultados somente com o método LIMA foram semelhantes ao de {\it Pelle, 2017} com o classificador SVM e inferiores utilizando NB.
+\subsection{Experimentos com {\it OffComBr-3}}
+
+Na Tabela \ref{tab:resultados-experimentos-br3}, são apresentados os resultados das execuções com a base de dados {\it OffComBR-3}. Destaca-se que todos os ganhos são maiores pelo fato de que a classificação dos comentários são mais precisos que a da base de dados {\it OffComBR-2}. 
+
+Os experimentos {\it original\_1G\_2G\_3G\_FS}, {\it lower\_1G\_FS}, {\it lower\_1G\_2G\_FS} e {\it lower\_1G\_2G\_3G\_FS}, tiveram um ganho estatístico com a combinação de {\it baseline + LIMA} utilizando o classificador SVM de até 5,23\%. 
+
+Para o classificador NB, com a combinação {\it baseline + LIMA}, somente o experimento {\it lower\_1G\_FS} obteve melhor resultado com um ganho de 3,85\%. Resultados somente com o método {\it LIMA}, tiveram empate estatístico em oito experimentos.
 
 \begin{table}[h]
 \renewcommand \arraystretch{1.25}
 \scalebox{0.673}{
     \begin{tabular}{l|cccc|cccc|cccc}
     \hline
-\multicolumn{1}{c|}{} & \multicolumn{4}{c|}{\textit{\textbf{Pelle, 2017}}} & \multicolumn{4}{c|}{\textit{\textbf{LIMA}}} & \multicolumn{4}{c}{\textit{\textbf{Pelle, 2017 + LIMA}}} \\ \hline
+\multicolumn{1}{c|}{} & \multicolumn{4}{c|}{\textit{\textbf{baseline}}} & \multicolumn{4}{c|}{\textit{\textbf{LIMA}}} & \multicolumn{4}{c}{\textit{\textbf{baseline + LIMA}}} \\ \hline
 \textbf{Experimento} & \textbf{SVM} & \textbf{STD} & \textbf{NB} & \textbf{STD} & \textbf{SVM} & \textbf{STD} & \textbf{NB} & \textbf{STD} & \textbf{SVM} & \textbf{STD} & \textbf{NB} & \textbf{STD} \\ \hline
-\textit{original\_1G} & 78,16\% & 0,03 & 77,82\% & 0,07 & 71,73\% & 0,00 & 73,73\% & 0,11 & 78,67\% & 0,04 & 77,82\% & 0,07 \\ 
-\textit{original\_1G\_FS} & 80,61\% & 0,03 & 81,07\% & 0,02 & 78,78\% & 0,04 & 77,80\% & 0,04 & 81,42\% & 0,04 & 79,97\% & 0,03 \\ 
-\textit{original\_1G\_2G} & 78,02\% & 0,03 & 77,69\% & 0,05 & 71,73\% & 0,00 & 76,67\% & 0,03 & 77,86\% & 0,04 & 77,69\% & 0,05 \\ 
-\textit{original\_1G\_2G\_FS} & 79,29\% & 0,02 & 81,14\% & 0,03 & 79,52\% & 0,04 & 77,22\% & 0,04 & 81,71\% & 0,04 & 80,38\% & 0,03 \\ 
-\textit{original\_1G\_2G\_3G} & 77,25\% & 0,03 & 77,46\% & 0,05 & 71,95\% & 0,01 & 76,21\% & 0,03 & 77,44\% & 0,05 & 77,46\% & 0,05 \\ 
-\textit{original\_1G\_2G\_3G\_FS} & 80,19\% & 0,02 & 78,67\% & 0,03 & 80,49\% & 0,04 & 69,69\% & 0,06 & 82,63\% $\uparrow$ & 0,03 & 79,04\% & 0,03 \\ 
-\textit{lower\_1G} & 77,47\% & 0,02 & 76,90\% & 0,07 & 71,73\% & 0,00 & 77,10\% & 0,04 & 77,11\% & 0,03 & 76,90\% & 0,07 \\ 
-\textit{lower\_1G\_FS} & 78,86\% & 0,03 & 78,56\% & 0,05 & 81,46\% & 0,04 & 70,09\% & 0,05 & 81,90\% $\uparrow$ & 0,04 & 80,72\% $\uparrow$ & 0,04 \\ 
-\textit{lower\_1G\_2G} & 77,62\% & 0,04 & 76,69\% & 0,04 & 71,73\% & 0,00 & 77,26\% & 0,03 & 78,12\% & 0,04 & 76,69\% & 0,04 \\
-\textit{lower\_1G\_2G\_FS} & 79,91\% & 0,03 & 78,96\% & 0,05 & 78,16\% & 0,04 & 74,17\% & 0,07 & 82,30\% $\uparrow$ & 0,04 & 77,59\% & 0,05 \\
-\textit{lower\_1G\_2G\_3G} & 77,23\% & 0,02 & 76,70\% & 0,04 & 72,12\% & 0,01 & 76,17\% & 0,04 & 77,91\% & 0,04 & 76,70\% & 0,04 \\
-\textit{lower\_1G\_2G\_3G\_FS} & 80,36\% & 0,02 & 77,53\% & 0,03 & 82,24\% & 0,04 & 73,10\% & 0,05 & 84,57\% $\uparrow$ & 0,03 & 78,51\% & 0,05 \\ \hline
+\textit{original\_1G} & 78,16\% & 0,03 & 77,82\% & 0,07 & 71,73\% $\downarrow$ & 0,00 & 73,73\% $\bullet$ & 0,11 & 78,67\% $\bullet$ & 0,04 & 77,82\% $\downarrow$ & 0,07 \\ 
+\textit{original\_1G\_FS} & 80,61\% & 0,03 & 81,07\% & 0,02 & 78,78\% $\bullet$ & 0,04 & 77,80\% $\downarrow$ & 0,04 & 81,42\% $\bullet$ & 0,04 & 79,97\% $\bullet$ & 0,03 \\ 
+\textit{original\_1G\_2G} & 78,02\% & 0,03 & 77,69\% & 0,05 & 71,73\% $\downarrow$ & 0,00 & 76,67\% $\bullet$ & 0,03 & 77,86\% $\bullet$ & 0,04 & 77,69\% $\downarrow$ & 0,05 \\ 
+\textit{original\_1G\_2G\_FS} & 79,29\% & 0,02 & 81,14\% & 0,03 & 79,52\% $\bullet$ & 0,04 & 77,22\% $\downarrow$ & 0,04 & 81,71\% $\bullet$ & 0,04 & 80,38\% $\bullet$ & 0,03 \\ 
+\textit{original\_1G\_2G\_3G} & 77,25\% & 0,03 & 77,46\% & 0,05 & 71,95\% $\downarrow$ & 0,01 & 76,21\% $\bullet$ & 0,03 & 77,44\% $\bullet$ & 0,05 & 77,46\% $\downarrow$ & 0,05 \\ 
+\textit{original\_1G\_2G\_3G\_FS} & 80,19\% & 0,02 & 78,67\% & 0,03 & 80,49\% $\bullet$ & 0,04 & 69,69\% $\downarrow$ & 0,06 & 82,63\% $\uparrow$ & 0,03 & 79,04\% $\bullet$ & 0,03 \\ 
+\textit{lower\_1G} & 77,47\% & 0,02 & 76,90\% & 0,07 & 71,73\% $\downarrow$ & 0,00 & 77,10\% $\bullet$ & 0,04 & 77,11\% $\bullet$ & 0,03 & 76,90\% $\downarrow$ & 0,07 \\ 
+\textit{lower\_1G\_FS} & 78,86\% & 0,03 & 78,56\% & 0,05 & 81,46\% $\uparrow$ & 0,04 & 70,09\% $\downarrow$ & 0,05 & 81,90\% $\uparrow$ & 0,04 & 80,72\% $\uparrow$ & 0,04 \\ 
+\textit{lower\_1G\_2G} & 77,62\% & 0,04 & 76,69\% & 0,04 & 71,73\% $\downarrow$ & 0,00 & 77,26\% $\bullet$ & 0,03 & 78,12\% $\bullet$ & 0,04 & 76,69\% $\bullet$ & 0,04 \\
+\textit{lower\_1G\_2G\_FS} & 79,91\% & 0,03 & 78,96\% & 0,05 & 78,16\% $\bullet$ & 0,04 & 74,17\% $\bullet$ & 0,07 & 82,30\% $\uparrow$ & 0,04 & 77,59\% $\downarrow$ & 0,05 \\
+\textit{lower\_1G\_2G\_3G} & 77,23\% & 0,02 & 76,70\% & 0,04 & 72,12\% $\downarrow$ & 0,01 & 76,17\% $\bullet$ & 0,04 & 77,91\% $\bullet$ & 0,04 & 76,70\% $\downarrow$ & 0,04 \\
+\textit{lower\_1G\_2G\_3G\_FS} & 80,36\% & 0,02 & 77,53\% & 0,03 & 82,24\% $\bullet$ & 0,04 & 73,10\% $\bullet$ & 0,05 & 84,57\% $\uparrow$ & 0,03 & 78,51\% $\bullet$ & 0,05 \\ \hline
 \end{tabular}
     }
     \caption{Experimentos com a base de dados {\it OffComBR-3}.}\label{tab:resultados-experimentos-br3}
 \end{table}
 
-Os resultados que foram considerados como maiores, foi feito o {\it t-test}, assim considerando que os resultados obtiveram um ganho estatístico de 95\% em cima das amostras executadas.
-
-
-[explicar a média geral dos métodos]
-
 \section{Discussão sobre os resultados}
+O objetivo desta seção é apresentar um resumo dos resultados obtidos após experimentos efetuados. Como visto anteriormente, foram realizados doze experimentos para as bases de dados {\it OffComBR-2} e {\it OffComBR-3}, totalizando vinte e quatro experimentos. 
+
+Analisando os resultados obtidos, os meta-atributos propostos neste trabalho, tiveram um melhor desempenho quando somados com as características do {\it baseline}. O classificador com melhor desempenho foi o SVM em quase todos os ganhos estatísticos. Com o método LIMA, em alguns casos, apresentou um resultado melhor em até 3,3\%. Para o classificador NB na base de dados {\it OffComBR-2} e {\it OffComBR-3}, boa parte dos resultados estivem abaixo do {\it baseline}.
+
+Os experimentos que obtiveram ganhos estatísticos foram os que utilizaram redução de atributos, na qual, as características mais relevantes são selecionadas. Foi possível perceber que os meta-atributos propostos sempre estiveram presentes nos experimentos com o método de redução de atributos. A Tabela \ref{tab:resultados-experimentos-com-ganho} apresenta os resultados das duas bases de dados, somente com os experimentos que possuíram características relevantes para realizar a classificação. Levando em consideração o classificador SVM, quase todos os resultados de {\it baseline + LIMA} obtiveram uma média melhor que ao {\it baseline}.
+
+\begin{table}[h]
+\renewcommand \arraystretch{1.25}
+\scalebox{0.81}{
+\begin{tabular}{l|cc|cc|cc|cc}
+\hline
+ & \multicolumn{4}{c}{\textit{\textbf{OffComBR-2}}} & \multicolumn{4}{|c}{\textit{\textbf{OffComBR-3}}} \\ \hline
+ & \multicolumn{2}{c}{\textbf{baseline}} & \multicolumn{2}{|c}{\textbf{baseline + LIMA}} & \multicolumn{2}{|c}{\textbf{baseline}} & \multicolumn{2}{|c}{\textbf{baseline + LIMA}} \\ \hline
+\textbf{Experimento} & \textbf{SVM} & \textbf{NB} & \textbf{SVM} & \textbf{NB} & \textbf{SVM} & \textbf{NB} & \textbf{SVM} & \textbf{NB} \\
+\textit{original\_1G\_FS} & 70,81\% & 65,63\% & 72,46\% $\bullet$ & 66,14\% $\bullet$ & 80,61\% & 81,07\% & 81,42\% $\bullet$ & 79,97\% $\bullet$ \\
+\textit{original\_1G\_2G\_FS} & 70,05\% & 64,15\% & 71,23\% $\bullet$ & 65,83\% $\bullet$ & 79,29\% & 81,14\% & 81,71\% $\bullet$ & 80,38\% $\bullet$ \\
+\textit{original\_1G\_2G\_3G\_FS} & 70,79\% & 66,90\% & 70,82\% $\bullet$ & 66,54\% $\bullet$ & 80,19\% & 78,67\% & 82,63\% $\uparrow$ & 79,04\% $\bullet$ \\
+\textit{lower\_1G\_FS} & 68,66\% & 45,80\% & 72,19\% $\uparrow$ & 47,02\% $\bullet$ & 78,86\% & 78,56\% & 81,90\% $\uparrow$ & 80,72\% $\uparrow$ \\
+\textit{lower\_1G\_2G\_FS} & 69,58\% & 63,30\% & 72,46\% $\bullet$ & 46,50\% $\downarrow$ & 79,91\% & 78,96\% & 82,30\% $\uparrow$ & 77,59\% $\downarrow$ \\
+\textit{lower\_1G\_2G\_3G\_FS} & 66,95\% & 41,18\% & 72,11\% $\uparrow$ & 43,20\% $\bullet$ & 80,36\% & 77,53\% & 84,57\% $\uparrow$ & 78,51\% $\bullet$
+\end{tabular}
+}
+
+\caption{Experimentos com redução de atributos e seus resultados.}\label{tab:resultados-experimentos-com-ganho}
+\end{table}
+
+A partir desta análise, pode-se concluir que os meta-atributos combinados com outras características, obtiveram um bom resultado para classificação dos textos com o objetivo de identificar o discurso de ódio.
 
 \section{Código-Fonte}\label{sec:codigo-fonte}
 Esta seção apresenta as ferramentas e bibliotecas que foram utilizadas no desenvolvimento do código fonte.
-Todas as etapas do processo foram codificadas utilizando a linguagem de programação Python. Para trabalhar com os algoritmos de classificação foi utilizado a biblioteca {\bf scikit-learn}\footnote{\url{https://scikit-learn.org/stable/}}. Esta, possui uma grande quantidade de ferramentas para algoritmos de aprendizado de maquina, além de possuir todas as ferramentas necessárias para fazer a leitura dos arquivos da base de dados. Para realizar o pré-processamento do texto foi utilizado a biblioteca \textbf{nltk}\footnote{\url{https://www.nltk.org/}} ({\it Natural Language Toolkit}).
+Todas as etapas do processo foram codificadas utilizando a linguagem de programação Python. Para trabalhar com os algoritmos de classificação foi utilizado a biblioteca {\bf scikit-learn}\footnote{\url{https://scikit-learn.org/stable/}}. Esta, possui uma grande quantidade de ferramentas para algoritmos de aprendizado de máquina, além de possuir todas as ferramentas necessárias para fazer a leitura dos arquivos da base de dados. Para realizar o pré-processamento do texto foi utilizado a biblioteca \textbf{nltk}\footnote{\url{https://www.nltk.org/}} ({\it Natural Language Toolkit}).
 
 Todos os códigos das ferramentas utilizadas para os testes estão disponível publicamente.\footnote{\url{https://gitlab.com/cleiton-limapin/tcc-final}}
 
 \chapter{Conclusão}\label{cap:conclusao}
-Os experimentos que obtiveram ganho são os que possuem características relevantes utilizando o ganho de informação ({\it *\_FS}). Investigando os mesmos, verificou-se algumas informações semelhantes entre os mesmos: 
 
-\begin{itemize}
-    \item As novas características utilizando meta-atributos, todas estavam presentes nos experimentos que utilizam ganho de informação;
-    \item Palavras consideradas "palavrões"~ são fortes indicativos de que um comentário pode ser um discurso de ódio;
-    \item A letra "a"~ é uma das características mais relevantes.
-\end{itemize}
+Esse trabalho de conclusão de curso teve como objetivo explorar e propor novas características para a classificação de texto, com o intuito de identificar o discurso de ódio em documentos. Para tal, foram usados métodos de processamento de linguagem natural e aprendizagem de máquina.   
+
+Foi utilizado como fundamentação o método proposto por \cite{canutoestudo}, que cria meta-atributos a partir da extração de   informações sobre a  similaridade/vizinhança de cada documento. Tais características foram analisadas de forma isolada e em conjunto com outras características de trabalhos relacionados.
+
+Utilizando a base de dados proposta por \cite{Pelle2017}, experimentos foram realizados com diferentes combinações para analisar o uso dos meta-atributos em diferentes cenários. O método proposto obteve bons resultados em alguns casos. Os meta-atributos, combinados com características propostas por \cite{Pelle2017}, obtiveram ganhos estatísticos de até 84,57\% em comparação com as características originais.
+
+Utilizando o classificador SVM, os meta-atributos, analisados separadamente, obtiveram resultados próximos ao original. Mostrando que as novas características são promissoras para melhorar a qualidade da classificação.
+
+\section{Trabalhos Futuros}
+Uma forma de complementar esse trabalho é explorar métodos de analise de sentimento, onde teve bons resultados em trabalhos relacionados, e realizar a combinação com os meta-atributos.
+
+No trabalho de \cite{canutoestudo}, é citado alguns trabalhos relacionados que propõem outros meta-atributos, levando em consideração outros tipos de informação. Para um trabalho futuro é interessantes aplicar os mesmos métodos para identificação de discurso de ódio em textos.
+
+Por fim, outro trabalho importante seria realizar a construção de um modelo de predição com o mesmo conjunto de dados e método proposto neste trabalho, porém explorando outros métodos de classificação e os mesmos com outras configurações, com o objetivo de aprimorar os resultados.
